@@ -599,8 +599,6 @@ class Grammatic
         string right = node.Children.Count > 1 ? PrintTreeLinear(node.Children[1]) : "@";
         return $" ({i++})[{left},{node.Value},{right}] ";
     }
-
-    
     
     
 }
