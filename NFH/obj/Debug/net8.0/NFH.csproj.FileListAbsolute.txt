@@ -1,0 +1,14 @@
+/Users/mac/Desktop/Study/Формальное программирование/NFH/NFH/bin/Debug/net8.0/NFH
+/Users/mac/Desktop/Study/Формальное программирование/NFH/NFH/bin/Debug/net8.0/NFH.deps.json
+/Users/mac/Desktop/Study/Формальное программирование/NFH/NFH/bin/Debug/net8.0/NFH.runtimeconfig.json
+/Users/mac/Desktop/Study/Формальное программирование/NFH/NFH/bin/Debug/net8.0/NFH.dll
+/Users/mac/Desktop/Study/Формальное программирование/NFH/NFH/bin/Debug/net8.0/NFH.pdb
+/Users/mac/Desktop/Study/Формальное программирование/NFH/NFH/obj/Debug/net8.0/NFH.GeneratedMSBuildEditorConfig.editorconfig
+/Users/mac/Desktop/Study/Формальное программирование/NFH/NFH/obj/Debug/net8.0/NFH.AssemblyInfoInputs.cache
+/Users/mac/Desktop/Study/Формальное программирование/NFH/NFH/obj/Debug/net8.0/NFH.AssemblyInfo.cs
+/Users/mac/Desktop/Study/Формальное программирование/NFH/NFH/obj/Debug/net8.0/NFH.csproj.CoreCompileInputs.cache
+/Users/mac/Desktop/Study/Формальное программирование/NFH/NFH/obj/Debug/net8.0/NFH.dll
+/Users/mac/Desktop/Study/Формальное программирование/NFH/NFH/obj/Debug/net8.0/refint/NFH.dll
+/Users/mac/Desktop/Study/Формальное программирование/NFH/NFH/obj/Debug/net8.0/NFH.pdb
+/Users/mac/Desktop/Study/Формальное программирование/NFH/NFH/obj/Debug/net8.0/NFH.genruntimeconfig.cache
+/Users/mac/Desktop/Study/Формальное программирование/NFH/NFH/obj/Debug/net8.0/ref/NFH.dll
