@@ -600,7 +600,6 @@ class Grammatic
         return $" ({i++})[{left},{node.Value},{right}] ";
     }
     
-    
 }
 
 class Program
