@@ -12,3 +12,4 @@
 /Users/mac/Desktop/Study/Формальное программирование/NFH/NFH/obj/Debug/net8.0/NFH.pdb
 /Users/mac/Desktop/Study/Формальное программирование/NFH/NFH/obj/Debug/net8.0/NFH.genruntimeconfig.cache
 /Users/mac/Desktop/Study/Формальное программирование/NFH/NFH/obj/Debug/net8.0/ref/NFH.dll
+/Users/mac/Desktop/Study/Формальное программирование/NFH/NFH/obj/Debug/net8.0/NFH.sourcelink.json

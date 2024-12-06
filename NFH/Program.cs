@@ -392,6 +392,7 @@ class Grammatic
     // Шаг 4: Если стартовый символ порождает ε, добавляем новое стартовое правило
     if (epsilonGenerating.Contains(S))
     {
+        //P.RemoveWhere()
         string newStart = S + "'";
         VN.Add(newStart);
         P.Add(new Production(newStart, S));
@@ -516,10 +517,17 @@ class Grammatic
         if (cykTable[input.Length - 1, 0].Contains(S))
         {
             Console.WriteLine($"Строка '{input}' принадлежит языку.");
-            TreeNode tree = ReconstructTree(cykTable, input, input.Length - 1, 0, S);
-            Console.WriteLine("Дерево:");
-            //PrintTree(tree, "");
-            Console.WriteLine(PrintTreeLinear(tree));
+            // TreeNode tree = ReconstructTree(cykTable, input, input.Length - 1, 0, S);
+            //List<string> linearReconstruction = ReconstructLinear(cykTable, input.Length - 1, 0, "","",S);
+            var linearReconstruction = ReconstructLinear(cykTable, input.Length - 1, 0,S);
+            // Console.WriteLine("Дерево:");
+            // Console.WriteLine(PrintTreeLinear(tree));
+            Console.WriteLine("Реконструкция линейно:");
+            
+            foreach (string line in linearReconstruction)
+            {
+                Console.WriteLine(line);
+            }
 
         }
         else
@@ -527,6 +535,82 @@ class Grammatic
             Console.WriteLine($"Строка '{input}' не принадлежит языку.");
         }
     }
+    
+    StringBuilder reconstruction = new StringBuilder();
+    
+    private HashSet<string> ReconstructLinear(HashSet<string>[,] cykTable, int i, int j, string current = "", string left = "", string right = "")
+    {
+        HashSet<string> reconstructionLines = new HashSet<string>();
+
+        // Базовый случай: достигли атомарного элемента
+        if (i == 0)
+        {
+            reconstructionLines.Add(current);
+            return reconstructionLines;
+        }
+
+        // Перебираем возможные разбиения
+        for (int k = 0; k < i; k++)
+        {
+            foreach (string cyk1 in cykTable[k, j]) // Левый элемент
+            {
+                foreach (string cyk2 in cykTable[i - k - 1, j + k + 1]) // Правый элемент
+                {
+                    // Формируем строку для текущего шага
+                    string step = $"{current}=>{left}{cyk1}{cyk2}{right}";
+
+                    // Рекурсивная обработка правого элемента
+                    var rightResults = ReconstructLinear(cykTable, i - k - 1, j + k + 1, step, left + cyk1, right);
+                    reconstructionLines.UnionWith(rightResults);
+
+                    // Рекурсивная обработка левого элемента
+                    var leftResults = ReconstructLinear(cykTable, k, j, step, left, right + cyk2);
+                    reconstructionLines.UnionWith(leftResults);
+                }
+            }
+        }
+
+        return reconstructionLines;
+    }
+    private string ReconstructLinear1(HashSet<string>[,] table, string input, int i, int j, string current)
+    {
+       
+
+        // Рекурсивная функция для реконструкции
+        void Reconstruct(int i, int j, string current)
+        {
+            reconstruction.Append(current);
+
+            foreach (var production in P)
+            {
+                string[] rights = production.Right.Split(' ');
+
+                if (production.Left == current && rights.Length == 2) // Двухчленные правила
+                {
+                    for (int k = 0; k < i; k++) // Перебираем точку разбиения
+                    {
+                        if (table[k, j].Contains(rights[0]) && table[i - k - 1, j + k + 1].Contains(rights[1]))
+                        {
+                            reconstruction.Append(" => ");
+                            reconstruction.Append(rights[0]).Append(rights[1]); // Линейное представление
+                            Reconstruct(k, j, rights[0]);
+                            Reconstruct(i - k - 1, j + k + 1, rights[1]);
+                            return;
+                        }
+                    }
+                }
+                // else if (production.Left == current && rights.Length == 1 && j < input.Length && rights[0] == input[j].ToString()) // Терминальные символы
+                // {
+                //     reconstruction.Append(" => ").Append(rights[0]);
+                //     return;
+                // }
+            }
+        }
+
+        Reconstruct(i, j, current);
+        return reconstruction.ToString();
+    }
+    
     
     class TreeNode
     {
@@ -653,32 +737,32 @@ class Program
         // string s0 = "(a+b)#";
         // grammatic0.CYK(s0);
         
-        
-        
-        
-        HashSet<string> VN0 = new HashSet<string> { "Z", "E", "T", "F" };
-        HashSet<string> VT0 = new HashSet<string> { "#", "|", "(", ")", "a", "b", "!" };
-        HashSet<Production> P0 = new HashSet<Production>
-        {
-            new Production("Z", "E #"),
-            new Production("E", "E | T"),
-            new Production("E", "T"),
-            new Production("T", "! F"),
-            new Production("F", "a"),
-            new Production("F", "b"),
-            new Production("F", "( E )")
-        };
-        Grammatic grammatic0 = new Grammatic(VN0, VT0, "Z", P0);
-        Console.WriteLine("Исходная грамматика: \n"+grammatic0);
-        grammatic0.TerminalToNotTerminal();
-        Console.WriteLine("Перевод терминалов в нетерминалы: \n"+grammatic0);
-        grammatic0.RemovingLongRules();
-        Console.WriteLine("Удаление длинных правил: \n"+grammatic0);
-        grammatic0.RemovingChainRules();
-        Console.WriteLine("Удаление цепных правил: \n"+grammatic0);
-
-        string s = "!a|!b#";
-        grammatic0.CYK(s);
+        //
+        //
+        //
+        // HashSet<string> VN0 = new HashSet<string> { "Z", "E", "T", "F" };
+        // HashSet<string> VT0 = new HashSet<string> { "#", "|", "(", ")", "a", "b", "!" };
+        // HashSet<Production> P0 = new HashSet<Production>
+        // {
+        //     new Production("Z", "E #"),
+        //     new Production("E", "E | T"),
+        //     new Production("E", "T"),
+        //     new Production("T", "! F"),
+        //     new Production("F", "a"),
+        //     new Production("F", "b"),
+        //     new Production("F", "( E )")
+        // };
+        // Grammatic grammatic0 = new Grammatic(VN0, VT0, "Z", P0);
+        // Console.WriteLine("Исходная грамматика: \n"+grammatic0);
+        // grammatic0.TerminalToNotTerminal();
+        // Console.WriteLine("Перевод терминалов в нетерминалы: \n"+grammatic0);
+        // grammatic0.RemovingLongRules();
+        // Console.WriteLine("Удаление длинных правил: \n"+grammatic0);
+        // grammatic0.RemovingChainRules();
+        // Console.WriteLine("Удаление цепных правил: \n"+grammatic0);
+        //
+        // string s = "!a|!b#";
+        // grammatic0.CYK(s);
         
         
         // Console.WriteLine("------------------------------------------------");
@@ -702,27 +786,28 @@ class Program
         // grammatic2.RemovingEpsilonRules();
         // Console.WriteLine("Удаление epsilon-правил: \n"+grammatic2);
         
-        // HashSet<string> VN = new HashSet<string>() {"S","A","B"};
-        // HashSet<string> VT = new HashSet<string>() {"a","b","c"};
-        // HashSet<Production> P = new HashSet<Production>()
-        // {
-        //     new Production("S", "A S"),
-        //     new Production("S", "b"),
-        //     new Production("A", "A B"),
-        //     new Production("B", "a"),
-        //     new Production("B", "c"),
-        //     new Production("A", "c"),
-        // };
-        // Grammatic grammatic = new Grammatic(VN, VT, "S", P);
-        // string s = "caab";
-        // grammatic.CYK(s);
+        HashSet<string> VN = new HashSet<string>() {"S","A","B"};
+        HashSet<string> VT = new HashSet<string>() {"a","b","c"};
+        HashSet<Production> P = new HashSet<Production>()
+        {
+            new Production("S", "A S"),
+            new Production("S", "b"),
+            new Production("A", "A B"),
+            new Production("B", "a"),
+            new Production("B", "c"),
+            new Production("A", "c"),
+        };
+        Grammatic grammatic = new Grammatic(VN, VT, "S", P);
+        string s = "caab";
+        grammatic.CYK(s);
         
         HashSet<string> VN1 = new HashSet<string> { "S", };
         HashSet<string> VT1 = new HashSet<string> { "(", ")" };
         HashSet<Production> P1 = new HashSet<Production>
         {
             new Production("S", "( S ) S"),
-            new Production("S", ""),
+            // new Production("S", ""),
+            new Production("S", "ε"),
         };
         Grammatic grammatic1 = new Grammatic(VN1, VT1, "S", P1);
         Console.WriteLine("Исходная грамматика: \n"+grammatic1);
