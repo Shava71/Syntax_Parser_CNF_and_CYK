@@ -534,7 +534,7 @@ class Grammatic
                 for (int i = 0; i < partLines[^1].Length; i++)
                 {
                     string part = partLines[^1][i].ToString();
-                    if (char.IsDigit(partLines[^1][i+1]))
+                    if (i + 1 < partLines[^1].Length && char.IsDigit(partLines[^1][i+1]))
                     {
                         part = partLines[^1][i+1].ToString();
                         i++;
@@ -579,29 +579,28 @@ class Grammatic
     {
         HashSet<string> reconstructionLines = new HashSet<string>();
 
-        // Базовый случай: достигли атомарного элемента
+        //Достигли атомарного элемента
         if (i == 0)
         {
             reconstructionLines.Add(current);
             return reconstructionLines;
         }
 
-        // Перебираем возможные разбиения
+        //Всевозможные разбиения
         for (int k = 0; k < i; k++)
         {
-            foreach (string cyk1 in cykTable[k, j]) // Левый элемент
+            foreach (string cyk1 in cykTable[k, j]) //Левый элемент
             {
-                foreach (string cyk2 in cykTable[i - k - 1, j + k + 1]) // Правый элемент
+                foreach (string cyk2 in cykTable[i - k - 1, j + k + 1]) //Правый элемент
                 {
-                    // Формируем строку для текущего шага
                     string step = $"{current}=>{left}{cyk1}{cyk2}{right}";
 
-                    // Рекурсивная обработка правого элемента
+                    //обработка правого элемента
                     var rightResults = ReconstructLinear(cykTable, i - k - 1, j + k + 1, step, left + cyk1, right);
                     reconstructionLines.UnionWith(rightResults);
 
-                    // Рекурсивная обработка левого элемента
-                    var leftResults = ReconstructLinear(cykTable, k, j, step, left, right + cyk2);
+                    //обработка левого элемента
+                    var leftResults = ReconstructLinear(cykTable, k, j, step, left, cyk2+right);
                     reconstructionLines.UnionWith(leftResults);
                 }
             }
@@ -836,7 +835,7 @@ class Program
         };
         Grammatic grammatic = new Grammatic(VN, VT, "S", P);
         string s = "caab";
-        //grammatic.CYK(s);
+        grammatic.CYK(s);
         
         HashSet<string> VN1 = new HashSet<string> { "S", };
         HashSet<string> VT1 = new HashSet<string> { "(", ")" };
