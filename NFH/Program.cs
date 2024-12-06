@@ -519,14 +519,51 @@ class Grammatic
             Console.WriteLine($"Строка '{input}' принадлежит языку.");
             // TreeNode tree = ReconstructTree(cykTable, input, input.Length - 1, 0, S);
             //List<string> linearReconstruction = ReconstructLinear(cykTable, input.Length - 1, 0, "","",S);
-            var linearReconstruction = ReconstructLinear(cykTable, input.Length - 1, 0,S);
+            HashSet<string> linearReconstruction = ReconstructLinear(cykTable, input.Length - 1, 0,S);
             // Console.WriteLine("Дерево:");
             // Console.WriteLine(PrintTreeLinear(tree));
             Console.WriteLine("Реконструкция линейно:");
             
+            
+            HashSet<string> updatedLines = new HashSet<string>();
             foreach (string line in linearReconstruction)
             {
+                string symbolVT = "=>";
+                string[] partLines = line.Split("=>");
+
+                for (int i = 0; i < partLines[^1].Length; i++)
+                {
+                    string part = partLines[^1][i].ToString();
+                    if (char.IsDigit(partLines[^1][i+1]))
+                    {
+                        part = partLines[^1][i+1].ToString();
+                        i++;
+                    }
+                    foreach (Production p in P)
+                    {
+                        if (p.Left.Contains(part) && p.Right.Length == 1)
+                        {
+                            symbolVT += p.Right;
+                            break;
+                        }
+                    }
+                }
+                updatedLines.Add(line+symbolVT);
+            }
+
+            foreach (string line in updatedLines)
+            {
                 Console.WriteLine(line);
+            }
+            
+            Console.WriteLine("\nВсе правильные последовательности:");
+            foreach (string line in updatedLines)
+            {
+                string[] partLines = line.Split("=>");
+                if (partLines[^1] == input)
+                {
+                    Console.WriteLine(line);
+                }
             }
 
         }
@@ -799,7 +836,7 @@ class Program
         };
         Grammatic grammatic = new Grammatic(VN, VT, "S", P);
         string s = "caab";
-        grammatic.CYK(s);
+        //grammatic.CYK(s);
         
         HashSet<string> VN1 = new HashSet<string> { "S", };
         HashSet<string> VT1 = new HashSet<string> { "(", ")" };
